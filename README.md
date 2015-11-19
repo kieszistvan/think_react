@@ -25,11 +25,27 @@
 - strong cohesion throughout your application between HTML and logic
 
 ### Components
-- loose coupling between _Components_ 
+- loose coupling between _components_ 
 - your concern is narrowed down to components
 - composing components over composing templates
 - state machines
 - livecycle events
  
+```javascript
+class Drawer extends React.Component {
+  render() {
+   return (
+     <div className='drawer'>
+      <ul className='drawer__items'>
+       <li className='drawer__item'>Item 1</li>
+       <li className='drawer__item'>Item 2</li>
+       <li className='drawer__item'>Item 3</li>
+      </ul>
+     </div>
+   )
+  }
+}
 
+export default Drawer;
+```
 
