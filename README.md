@@ -29,23 +29,74 @@
 - your concern is narrowed down to components
 - composing components over composing templates
 - state machines
-- livecycle events
  
 ```javascript
-class Drawer extends React.Component {
+class MyComponent extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   render() {
-   return (
-     <div className='drawer'>
-      <ul className='drawer__items'>
-       <li className='drawer__item'>Item 1</li>
-       <li className='drawer__item'>Item 2</li>
-       <li className='drawer__item'>Item 3</li>
-      </ul>
-     </div>
-   )
+    return (
+      <div className='main'>
+        <MySubComponent name={ this.state.name }/>
+      </div>
+    )
   }
 }
 
-export default Drawer;
+export default MyComponent;
+
+class MySubComponent extends React.Component {
+  static get defaultProps() {
+    return {
+      name: 'YOLO'
+    }
+  }
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <p>Hello {{ this.props.name }}</p>
+    )
+  }
+}
+
+export default MySubComponent;
 ```
 
+#### JSX
+- supports HTML attributes (class => className, for => htmlFor)
+- compile-to-JS
+```javascript
+React.createElement('a', {href: 'https://facebook.github.io/react/'}, 'Hello!')
+```
+```html
+<a href='https://facebook.github.io/react/'>Hello!</a>
+```
+
+#### [Lifecycle](https://facebook.github.io/react/docs/component-specs.html) (mount, update, unmount)
+- component gets rendered
+- hook up on events with functions
+  - render()
+  - componentWillMount()
+  - componentDidMount()
+  - shouldComponentUpdate()
+
+#### Data flow
+- goes from parent to child
+- props are immutable
+- changes are propagated back via callbacks
+
+#### Virtual DOM
+- no direct updates to the actual DOM
+- minimizing reflow
+- batched updates (minimizes changes in time)
+- updates only a minimum of elements
+
+#### [Synthetic Events](https://facebook.github.io/react/docs/events.html)
+- event handlers works accros browser
+
+#### Component children
+- propagation of childs via ```this.props.children```
+- it's an Array if component wraps multiple nodes, it is an Object when component wraps just one node
