@@ -3,20 +3,127 @@
   <head>
     <meta charset="utf-8">
     <title>React Tutorial</title>
-    <!-- Not present in the tutorial. Just for basic styling. -->
-    <link rel="stylesheet" href="css/base.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.14.0/react-dom.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.6.15/browser.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
   </head>
   <body>
     <div id="content"></div>
-    <script type="text/babel" src="scripts/example.js"></script>
     <script type="text/babel">
-      // To get started with this tutorial running your own code, simply remove
-      // the script tag loading scripts/example.js and start writing code here.
+      
+      /**
+       * The main App component composes the various elements of the UI together
+       */
+      class App extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            items: ['Item 1', 'Item 2', 'Item 3']
+          }
+          this.clickerClicked = this.clickerClicked.bind(this);
+        }
+        clickerClicked() {
+          let newItems = this.state.items.slice()
+          newItems.push(`Item ${ newItems.length + 1 }`);
+          
+          this.setState({
+            items: newItems
+          })
+        }
+        render() {
+          let compToRender;
+          if (this.state.items.length < 20) {
+            compToRender = (
+              <div>
+                <Clicker initCount={ this.state.items.length + 1 } clicked={ this.clickerClicked } />
+                <Drawer items={ this.state.items } />
+              </div>
+            )
+          } else {
+            compToRender = <Sheen />;
+          }
+
+          return (
+              <div>
+                { compToRender }    
+              </div>
+          )
+        }
+      }
+
+      /**
+       * Drawer displays a list of items
+       */
+      class Drawer extends React.Component {
+        constructor(props) {
+          super(props);
+        }
+        componentWillUnmount() {
+          console.log('Tschüss');
+        }
+        render() {
+          return (
+           <div className='drawer'>
+            <ul className='drawer__items'>
+              { this.props.items.map((itemName, index) => {
+                  return <li key={ index } className='drawer__item'>{ itemName }</li>
+                })
+              }
+             </ul>
+            </div>
+          )
+        }
+      }
+
+      /**
+       * Button wrapper to increase counter
+       */
+      class Clicker extends React.Component {
+        static get defaultProps() {
+          return {
+            initCount: 1
+          }
+        }
+        static get propTypes() {
+          return {
+            initCount: React.PropTypes.number,
+            clicked: React.PropTypes.func.isRequired
+          }
+        }
+        constructor(props) {
+          super(props);
+          this.state ={
+            count: this.props.initCount
+          };
+          this.buttonClicked = this.buttonClicked.bind(this);
+        }
+        buttonClicked() {
+          let newCount = this.state.count + 1;
+          this.setState({
+            count: newCount
+          });
+
+          this.props.clicked(newCount);
+        }
+        render() {
+          return (
+            <button onClick={ this.buttonClicked }>Upgrade to { this.state.count }</button>
+          )
+        }
+      }
+
+      /**
+       * Bi-Winning
+       */
+      function Sheen(props) {
+        return (
+          <div>
+            <img src='http://southernalpha.com/wp-content/uploads/2014/03/winning.png' alt='WINNING' />
+          </div>
+        )
+      }
+
+      ReactDOM.render(<App />, document.getElementById('content'));
     </script>
   </body>
 </html>
